@@ -1,0 +1,25 @@
+# -*- coding: utf-8 -*-
+import scrapy
+from scrapy.http import Request
+
+
+class GrailSpider(scrapy.Spider):
+    name = 'grail'
+    page_number = 2
+    allowed_domains = ['grailify.com']
+    start_urls = ['https://www.grailify.com/release-kalender/page/1/']
+
+    def parse(self, response):
+        single_shoe = response.xpath('.//div[@class="col-inner"]')
+        for shoe in single_shoe:
+            shoe_name = shoe.xpath('.//p[@class="name product-title"]/a/text()').get()
+            shoe_release = shoe.xpath ('.//span[@class="attribute-value"]/text()').get()
+            shoe_price = shoe.xpath ('.//span[@class="woocommerce-Price-amount amount"]/text()').get()
+            yield{'Schuh': shoe_name, 'Release Datum': shoe_release, 'Preis': shoe_price}
+
+
+
+        next_page = "https://www.grailify.com/release-kalender/page/"+ str(GrailSpider.page_number)
+        if GrailSpider.page_number < 4:
+            GrailSpider.page_number += 1
+            yield response.follow(next_page,callback=self.parse)
