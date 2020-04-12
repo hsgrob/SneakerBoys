@@ -1,0 +1,13 @@
+# Installing requirements
+git clone https://github.com/twintproject/twint.git
+cd twint
+pip3 install . -r requirements.txt
+
+# Installing twint
+pip3 install twint
+
+# Installing Pipnv
+pipenv install -e git+https://github.com/twintproject/twint.git#egg=twint
+
+# Combo
+twint -s yeezy --since 2020-04-10
